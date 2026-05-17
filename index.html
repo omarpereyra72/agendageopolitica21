@@ -681,9 +681,10 @@ body.dark-mode .editor-toolbar { background: #2a1e10; border-color: #5a4020; }
   border-top: 3px solid var(--gold);
   padding: 14px;
   box-shadow: 2px 2px 0 var(--shadow);
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
 }
-.rec-card:hover { transform: translateY(-2px); }
+.rec-card:hover { transform: translateY(-2px); box-shadow: 4px 4px 0 var(--shadow); }
 .rec-card-title {
   font-family: 'Cormorant Garamond', serif;
   font-size: 15px;
@@ -691,10 +692,24 @@ body.dark-mode .editor-toolbar { background: #2a1e10; border-color: #5a4020; }
   color: var(--ink);
   margin-bottom: 4px;
 }
+/* URL oculta por defecto, visible al hover sobre la tarjeta */
 .rec-card-url {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--sepia-light);
   word-break: break-all;
+  margin-bottom: 6px;
+  font-family: 'Old Standard TT', serif;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.25s ease, opacity 0.25s ease, margin 0.25s ease;
+  margin-bottom: 0;
+}
+.rec-card:hover .rec-card-url {
+  max-height: 60px;
+  opacity: 1;
   margin-bottom: 6px;
 }
 .rec-card-desc {
@@ -702,6 +717,17 @@ body.dark-mode .editor-toolbar { background: #2a1e10; border-color: #5a4020; }
   color: var(--ink-light);
   line-height: 1.5;
 }
+/* Barra de acciones al pie de la tarjeta */
+.rec-card-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--rule-light);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.rec-card:hover .rec-card-actions { opacity: 1; }
 
 /* ========================================================
    AGENDA DEL DÍA
@@ -1417,7 +1443,7 @@ textarea.form-input { resize: vertical; min-height: 80px; }
       <div class="section-header">
         <h2 class="section-headline">🔗 Recomendados</h2>
         <span class="section-sub">Sitios de análisis y fuentes independientes</span>
-        <button class="btn btn-primary" style="margin-left:auto" onclick="openModal('modal-add-rec')">➕ Agregar sitio</button>
+        <button class="btn btn-primary" style="margin-left:auto" onclick="openAddRec()">➕ Agregar sitio</button>
       </div>
 
       <div class="rec-grid" id="recGrid">
@@ -1524,14 +1550,15 @@ textarea.form-input { resize: vertical; min-height: 80px; }
   </div>
 </div>
 
-<!-- Modal: Agregar Recomendado -->
+<!-- Modal: Agregar / Editar Recomendado -->
 <div class="modal-overlay" id="modal-add-rec">
   <div class="modal-box">
     <div class="modal-header">
-      <span class="modal-title">🔗 Agregar Sitio Recomendado</span>
+      <span class="modal-title" id="rec-modal-title">🔗 Agregar Sitio Recomendado</span>
       <button class="modal-close" onclick="closeModal('modal-add-rec')">✕</button>
     </div>
     <div class="modal-body">
+      <input type="hidden" id="r-id">
       <div class="form-row">
         <label class="form-label">Nombre del sitio *</label>
         <input type="text" class="form-input form-input-sm" id="r-name" placeholder="The Intercept, CELAG, etc.">
@@ -2212,45 +2239,87 @@ function deleteAgendaItem(id) {
 // ============================================================
 // RECOMENDADOS
 // ============================================================
+function openAddRec() {
+  // Reset form to "add" mode
+  document.getElementById('r-id').value = '';
+  document.getElementById('r-name').value = '';
+  document.getElementById('r-url').value = '';
+  document.getElementById('r-cat').value = '';
+  document.getElementById('r-desc').value = '';
+  document.getElementById('rec-modal-title').textContent = '🔗 Agregar Sitio Recomendado';
+  openModal('modal-add-rec');
+}
+function openEditRec(id) {
+  const recs = load(KEYS.recs);
+  const r = recs.find(x => x.id === id);
+  if (!r) return;
+  document.getElementById('r-id').value = r.id;
+  document.getElementById('r-name').value = r.name;
+  document.getElementById('r-url').value = r.url;
+  document.getElementById('r-cat').value = r.cat || '';
+  document.getElementById('r-desc').value = r.desc || '';
+  document.getElementById('rec-modal-title').textContent = '✏️ Editar Sitio Recomendado';
+  openModal('modal-add-rec');
+}
 function saveRec() {
   const name = document.getElementById('r-name').value.trim();
-  const url = document.getElementById('r-url').value.trim();
+  const url  = document.getElementById('r-url').value.trim();
   if (!name || !url) { toast('⚠ Nombre y URL son obligatorios.'); return; }
-  const recs = load(KEYS.recs);
-  recs.push({
-    id: Date.now(),
-    name,
-    url,
-    cat: document.getElementById('r-cat').value.trim(),
-    desc: document.getElementById('r-desc').value.trim()
-  });
+  const recs   = load(KEYS.recs);
+  const editId = parseInt(document.getElementById('r-id').value) || null;
+  if (editId) {
+    // Edición: actualizar el elemento existente
+    const i = recs.findIndex(x => x.id === editId);
+    if (i > -1) {
+      recs[i] = { ...recs[i], name, url,
+        cat:  document.getElementById('r-cat').value.trim(),
+        desc: document.getElementById('r-desc').value.trim()
+      };
+      toast('✅ Sitio actualizado.');
+    }
+  } else {
+    // Alta nueva
+    recs.push({
+      id:   Date.now(),
+      name, url,
+      cat:  document.getElementById('r-cat').value.trim(),
+      desc: document.getElementById('r-desc').value.trim()
+    });
+    toast('🔗 Sitio agregado a Recomendados.');
+  }
   save(KEYS.recs, recs);
   closeModal('modal-add-rec');
-  ['r-name','r-url','r-cat','r-desc'].forEach(id => { document.getElementById(id).value = ''; });
   renderRecs();
-  toast('🔗 Sitio agregado a Recomendados.');
 }
 function renderRecs() {
   const recs = load(KEYS.recs);
   const grid = document.getElementById('recGrid');
   if (!recs.length) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">🔗</div><div class="empty-state-title">Sin sitios recomendados</div></div>`;
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">🔗</div><div class="empty-state-title">Sin sitios recomendados</div><div class="empty-state-text">Agregue fuentes de análisis, medios independientes y sitios de referencia.</div></div>`;
     return;
   }
   grid.innerHTML = recs.map(r => `
     <div class="rec-card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div>
-          <div class="rec-card-title"><a href="${r.url}" target="_blank" style="color:var(--red-headline);text-decoration:none">🔗 ${r.name}</a></div>
-          ${r.cat ? `<span class="tag">${r.cat}</span>` : ''}
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+        <div style="flex:1;min-width:0">
+          <div class="rec-card-title">
+            <a href="${r.url}" target="_blank" rel="noopener noreferrer"
+               style="color:var(--red-headline);text-decoration:none">🔗 ${r.name}</a>
+          </div>
+          ${r.cat ? `<span class="tag" style="margin-bottom:4px;display:inline-block">${r.cat}</span>` : ''}
+          <div class="rec-card-url">↗ ${r.url}</div>
         </div>
-        <button class="btn btn-sm btn-ghost" style="color:#b80000;min-width:24px" onclick="deleteRec(${r.id})">✕</button>
       </div>
-      <div class="rec-card-url">${r.url}</div>
-      ${r.desc ? `<div class="rec-card-desc">${r.desc}</div>` : ''}
+      ${r.desc ? `<div class="rec-card-desc" style="margin-top:8px">${r.desc}</div>` : ''}
+      <div class="rec-card-actions">
+        <button class="btn btn-sm btn-ghost" onclick="openEditRec(${r.id})" title="Editar este sitio">✏️ Editar</button>
+        <button class="btn btn-sm btn-ghost" onclick="navigator.clipboard.writeText('${r.url}').then(()=>toast('🔗 URL copiada.'))" title="Copiar URL">📋 Copiar URL</button>
+        <button class="btn btn-sm btn-ghost" style="margin-left:auto;color:#b80000" onclick="deleteRec(${r.id})" title="Eliminar">✕ Eliminar</button>
+      </div>
     </div>`).join('');
 }
 function deleteRec(id) {
+  if (!confirm('¿Eliminar este sitio de Recomendados?')) return;
   save(KEYS.recs, load(KEYS.recs).filter(r => r.id !== id));
   renderRecs();
   toast('🗑 Sitio eliminado.');
