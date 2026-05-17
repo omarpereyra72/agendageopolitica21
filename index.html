@@ -1,0 +1,2589 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGENDA GEOPOLÍTICA XXI — Archivo Personal</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+/* ========================================================
+   AGENDA GEOPOLÍTICA XXI — Estilos completos
+   Estética periódico vintage 1940-1950
+   ======================================================== */
+
+:root {
+  --paper: #f2ead6;
+  --paper-dark: #e8dcc0;
+  --paper-darker: #d9ccaa;
+  --ink: #1a1008;
+  --ink-light: #3d2b1a;
+  --red-headline: #b80000;
+  --red-soft: #8b2020;
+  --bordeaux: #6b1a1a;
+  --sepia: #7c5c3a;
+  --sepia-light: #a07850;
+  --gold: #9a7c38;
+  --gold-light: #c4a040;
+  --rule: #5a3e28;
+  --rule-light: #9a7a50;
+  --shadow: rgba(50, 30, 10, 0.25);
+  --shadow-deep: rgba(30, 15, 5, 0.45);
+
+  /* Dark mode */
+  --dm-bg: #181210;
+  --dm-paper: #211a12;
+  --dm-ink: #e8dcc0;
+  --dm-red: #cc2222;
+  --dm-sepia: #c4a040;
+  --dm-rule: #5a4020;
+}
+
+/* ---- RESET & BASE ---- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Libre Baskerville', 'Georgia', serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Paper texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.5;
+}
+
+/* Paper aging gradient */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 10% 10%, rgba(160,120,60,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 80%, rgba(100,70,30,0.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, transparent 60%, rgba(80,50,20,0.05) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---- DARK MODE ---- */
+body.dark-mode {
+  background: var(--dm-bg);
+  color: var(--dm-ink);
+}
+body.dark-mode { --paper: #211a12; --ink: #e8dcc0; --red-headline: #cc2222; --sepia: #c4a040; --rule: #5a4020; --rule-light: #4a3318; --shadow: rgba(0,0,0,0.5); }
+body.dark-mode .masthead { background: #150f08; border-color: #3a2810; }
+body.dark-mode .sidebar { background: #1a1208; border-color: #3a2810; }
+body.dark-mode .card { background: #1e1610; border-color: #3a2810; }
+body.dark-mode .modal-box { background: #1a1208; }
+body.dark-mode input, body.dark-mode textarea, body.dark-mode select { background: #2a1e10; color: var(--dm-ink); border-color: #5a4020; }
+body.dark-mode .editor-toolbar { background: #2a1e10; border-color: #5a4020; }
+
+/* ---- SCROLLBAR ---- */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--paper-dark); }
+::-webkit-scrollbar-thumb { background: var(--sepia); border-radius: 0; }
+
+/* ========================================================
+   MASTHEAD / CABECERA
+   ======================================================== */
+.masthead {
+  background: var(--paper-dark);
+  border-bottom: 4px double var(--rule);
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 3px 12px var(--shadow);
+}
+
+.masthead-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 20px;
+  border-bottom: 1px solid var(--rule-light);
+  font-family: 'Old Standard TT', serif;
+  font-size: 11px;
+  color: var(--sepia);
+}
+
+.masthead-title-area {
+  text-align: center;
+  padding: 12px 20px 8px;
+  position: relative;
+}
+
+.masthead-title-area::before,
+.masthead-title-area::after {
+  content: '✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦';
+  display: block;
+  color: var(--gold);
+  font-size: 10px;
+  letter-spacing: 4px;
+  opacity: 0.6;
+}
+
+.paper-title {
+  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+  font-size: clamp(28px, 5vw, 56px);
+  font-weight: 700;
+  color: var(--red-headline);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+  margin: 4px 0 2px;
+  text-shadow: 2px 2px 0 rgba(100,20,20,0.2);
+}
+
+.paper-subtitle {
+  font-family: 'Old Standard TT', serif;
+  font-size: clamp(10px, 1.5vw, 13px);
+  color: var(--sepia);
+  font-style: italic;
+  letter-spacing: 0.12em;
+  margin-bottom: 4px;
+}
+
+.masthead-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+  padding: 4px 20px 6px;
+  border-top: 2px solid var(--rule);
+}
+
+.masthead-nav a, .masthead-nav button {
+  font-family: 'Old Standard TT', serif;
+  font-size: 11px;
+  color: var(--ink);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 3px 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-right: 1px solid var(--rule-light);
+  transition: color 0.2s, background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.masthead-nav a:last-child, .masthead-nav button:last-child { border-right: none; }
+.masthead-nav a:hover, .masthead-nav button:hover { color: var(--red-headline); background: rgba(184,0,0,0.05); }
+.masthead-nav a.active, .masthead-nav button.active { color: var(--red-headline); font-weight: 700; }
+
+/* ========================================================
+   LAYOUT PRINCIPAL
+   ======================================================== */
+.app-layout {
+  display: flex;
+  min-height: calc(100vh - 160px);
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: 0;
+}
+
+/* ---- SIDEBAR ---- */
+.sidebar {
+  width: 260px;
+  min-width: 220px;
+  background: var(--paper-dark);
+  border-right: 2px solid var(--rule);
+  padding: 20px 16px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 160px;
+  height: calc(100vh - 160px);
+  overflow-y: auto;
+}
+
+.sidebar-section { margin-bottom: 20px; }
+
+.sidebar-title {
+  font-family: 'Old Standard TT', serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--sepia);
+  border-bottom: 1px solid var(--rule-light);
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 12px;
+  color: var(--ink-light);
+  text-decoration: none;
+  padding: 4px 6px;
+  border-radius: 0;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+.sidebar-link:hover { color: var(--red-headline); background: rgba(184,0,0,0.05); }
+.sidebar-link.active { color: var(--red-headline); font-weight: 700; border-left: 2px solid var(--red-headline); padding-left: 4px; }
+
+.sidebar-count {
+  margin-left: auto;
+  font-size: 10px;
+  background: var(--paper-darker);
+  padding: 1px 5px;
+  color: var(--sepia);
+  font-family: monospace;
+}
+
+/* Stats widget */
+.stat-widget {
+  background: var(--paper);
+  border: 1px solid var(--rule-light);
+  padding: 10px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+.stat-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--red-headline);
+  line-height: 1;
+}
+.stat-label {
+  font-family: 'Old Standard TT', serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--sepia);
+}
+
+/* Clock */
+.vintage-clock {
+  text-align: center;
+  padding: 10px;
+  border: 1px solid var(--rule-light);
+  background: var(--paper);
+  margin-bottom: 12px;
+}
+.clock-time {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--ink);
+  letter-spacing: 0.1em;
+}
+.clock-date {
+  font-family: 'Old Standard TT', serif;
+  font-size: 10px;
+  color: var(--sepia);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+/* Quick notes */
+.quick-note-area {
+  width: 100%;
+  background: #fffde8;
+  border: 1px solid var(--rule-light);
+  border-top: 3px solid var(--gold);
+  font-family: 'Libre Baskerville', serif;
+  font-size: 12px;
+  color: var(--ink);
+  padding: 8px;
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* ---- MAIN CONTENT ---- */
+.main-content {
+  flex: 1;
+  padding: 24px 28px;
+  min-width: 0;
+}
+
+/* ========================================================
+   SECTIONS / PAGES
+   ======================================================== */
+.section-page { display: none; }
+.section-page.active { display: block; }
+
+/* Section header */
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 20px;
+  border-bottom: 3px double var(--rule);
+  padding-bottom: 10px;
+}
+.section-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--red-headline);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.section-sub {
+  font-family: 'Old Standard TT', serif;
+  font-size: 12px;
+  color: var(--sepia);
+  font-style: italic;
+}
+
+/* ---- SEARCH & FILTER BAR ---- */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 12px;
+  background: var(--paper-dark);
+  border: 1px solid var(--rule-light);
+}
+.filter-bar input, .filter-bar select {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 12px;
+  padding: 6px 10px;
+  border: 1px solid var(--rule-light);
+  background: var(--paper);
+  color: var(--ink);
+  outline: none;
+  flex: 1;
+  min-width: 140px;
+}
+.filter-bar input:focus, .filter-bar select:focus { border-color: var(--red-headline); }
+.btn {
+  font-family: 'Old Standard TT', serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 6px 16px;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.btn:hover { background: var(--ink); color: var(--paper); }
+.btn-primary { background: var(--red-headline); color: var(--paper); border-color: var(--red-headline); }
+.btn-primary:hover { background: var(--bordeaux); border-color: var(--bordeaux); }
+.btn-sm { padding: 3px 10px; font-size: 10px; }
+.btn-ghost { background: transparent; color: var(--sepia); border-color: var(--rule-light); }
+.btn-ghost:hover { background: var(--paper-dark); color: var(--ink); }
+
+/* ========================================================
+   CARDS — TARJETAS EDITORIALES
+   ======================================================== */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: var(--paper);
+  border: 1px solid var(--rule-light);
+  border-top: 3px solid var(--rule);
+  box-shadow: 3px 3px 0 var(--shadow);
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 5px 5px 0 var(--shadow); }
+
+.card-image {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-bottom: 1px solid var(--rule-light);
+  filter: sepia(0.3) contrast(1.05);
+}
+.card-image-placeholder {
+  width: 100%;
+  height: 120px;
+  background: var(--paper-darker);
+  border-bottom: 1px solid var(--rule-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: var(--rule-light);
+}
+
+.card-body { padding: 14px 16px; flex: 1; display: flex; flex-direction: column; }
+
+.card-region {
+  font-family: 'Old Standard TT', serif;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--sepia);
+  margin-bottom: 4px;
+}
+
+.card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+.card-title a { color: inherit; text-decoration: none; }
+.card-title a:hover { color: var(--red-headline); }
+
+.card-meta {
+  font-family: 'Old Standard TT', serif;
+  font-size: 10px;
+  color: var(--sepia-light);
+  margin-bottom: 8px;
+  font-style: italic;
+}
+
+.card-summary {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-light);
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 10px;
+}
+.tag {
+  font-family: 'Old Standard TT', serif;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 2px 6px;
+  border: 1px solid var(--rule-light);
+  color: var(--sepia);
+  background: var(--paper-dark);
+}
+
+.card-actions {
+  display: flex;
+  gap: 4px;
+  padding: 8px 16px;
+  border-top: 1px solid var(--rule-light);
+  background: var(--paper-dark);
+  flex-wrap: wrap;
+}
+
+.favorite-btn { color: var(--sepia-light); }
+.favorite-btn.active { color: #c4a000; }
+
+/* Featured badge */
+.card-featured-badge {
+  position: absolute;
+  top: -1px;
+  right: 12px;
+  background: var(--red-headline);
+  color: var(--paper);
+  font-family: 'Old Standard TT', serif;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  padding: 2px 8px;
+}
+
+/* ========================================================
+   EDITOR DE ARTÍCULOS
+   ======================================================== */
+.editor-container {
+  border: 2px solid var(--rule);
+  background: var(--paper);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.03);
+}
+
+.editor-header {
+  padding: 16px 20px 12px;
+  border-bottom: 2px double var(--rule);
+  background: var(--paper-dark);
+}
+
+.editor-header input {
+  width: 100%;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+}
+.editor-header input::placeholder { color: var(--rule-light); font-style: italic; }
+
+.editor-meta-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.editor-meta-row input, .editor-meta-row select {
+  font-family: 'Old Standard TT', serif;
+  font-size: 11px;
+  border: none;
+  border-bottom: 1px solid var(--rule-light);
+  background: transparent;
+  color: var(--sepia);
+  padding: 2px 4px;
+  outline: none;
+  flex: 1;
+  min-width: 120px;
+}
+
+.editor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--rule-light);
+  background: var(--paper-darker);
+}
+.editor-toolbar button {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 12px;
+  padding: 4px 10px;
+  border: 1px solid var(--rule-light);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.editor-toolbar button:hover { background: var(--ink); color: var(--paper); }
+.editor-toolbar .sep { width: 1px; background: var(--rule-light); margin: 2px 4px; }
+
+.editor-body {
+  min-height: 400px;
+  padding: 24px 32px;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--ink);
+  outline: none;
+  columns: 2;
+  column-gap: 32px;
+  column-rule: 1px solid var(--rule-light);
+}
+.editor-body:empty::before {
+  content: 'Comience a escribir su análisis aquí...';
+  color: var(--rule-light);
+  font-style: italic;
+}
+
+.editor-footer {
+  padding: 10px 20px;
+  border-top: 1px solid var(--rule-light);
+  background: var(--paper-dark);
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ========================================================
+   HEMEROTECA / ARCHIVO
+   ======================================================== */
+.timeline {
+  position: relative;
+  padding-left: 30px;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: repeating-linear-gradient(to bottom, var(--rule) 0, var(--rule) 6px, transparent 6px, transparent 10px);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 24px;
+  padding: 16px 18px;
+  background: var(--paper);
+  border: 1px solid var(--rule-light);
+  border-left: 3px solid var(--red-headline);
+  box-shadow: 2px 2px 0 var(--shadow);
+}
+.timeline-item::before {
+  content: '◆';
+  position: absolute;
+  left: -21px;
+  top: 16px;
+  color: var(--red-headline);
+  font-size: 10px;
+}
+
+.timeline-date {
+  font-family: 'Old Standard TT', serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--sepia);
+  margin-bottom: 4px;
+}
+.timeline-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+/* ========================================================
+   RECOMENDADOS
+   ======================================================== */
+.rec-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+.rec-card {
+  background: var(--paper);
+  border: 1px solid var(--rule-light);
+  border-top: 3px solid var(--gold);
+  padding: 14px;
+  box-shadow: 2px 2px 0 var(--shadow);
+  transition: transform 0.2s;
+}
+.rec-card:hover { transform: translateY(-2px); }
+.rec-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.rec-card-url {
+  font-size: 11px;
+  color: var(--sepia-light);
+  word-break: break-all;
+  margin-bottom: 6px;
+}
+.rec-card-desc {
+  font-size: 12px;
+  color: var(--ink-light);
+  line-height: 1.5;
+}
+
+/* ========================================================
+   AGENDA DEL DÍA
+   ======================================================== */
+.agenda-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.agenda-date-display {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.agenda-item {
+  display: flex;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--rule-light);
+  align-items: flex-start;
+}
+.agenda-item:hover { background: var(--paper-dark); }
+.agenda-time {
+  font-family: 'Old Standard TT', serif;
+  font-size: 12px;
+  color: var(--sepia);
+  min-width: 50px;
+  font-weight: bold;
+}
+.agenda-text { font-size: 13px; flex: 1; }
+.agenda-done { text-decoration: line-through; color: var(--rule-light); }
+
+/* ========================================================
+   DECORATIVOS
+   ======================================================== */
+.ornamental-rule {
+  text-align: center;
+  color: var(--gold);
+  font-size: 12px;
+  letter-spacing: 6px;
+  margin: 16px 0;
+  opacity: 0.7;
+}
+
+.vintage-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--rule), var(--rule), transparent);
+  margin: 20px 0;
+  position: relative;
+}
+.vintage-divider::before {
+  content: '◈';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--paper);
+  color: var(--gold);
+  padding: 0 8px;
+  font-size: 14px;
+}
+
+/* Map decorativo */
+.world-map-section {
+  background: var(--paper-dark);
+  border: 1px solid var(--rule-light);
+  padding: 16px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.world-map-svg { max-width: 100%; opacity: 0.65; filter: sepia(0.5); }
+
+/* ========================================================
+   COLUMNAS ESTILO PERIÓDICO (Home)
+   ======================================================== */
+.newspaper-columns {
+  columns: 3;
+  column-gap: 28px;
+  column-rule: 1px solid var(--rule-light);
+}
+@media (max-width: 900px) { .newspaper-columns { columns: 2; } }
+@media (max-width: 580px) { .newspaper-columns { columns: 1; } }
+
+.news-col-item {
+  break-inside: avoid;
+  margin-bottom: 20px;
+}
+.news-col-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.news-col-headline a { color: inherit; text-decoration: none; }
+.news-col-headline a:hover { color: var(--red-headline); }
+.news-col-meta {
+  font-size: 10px;
+  color: var(--sepia);
+  font-style: italic;
+  margin-bottom: 4px;
+  font-family: 'Old Standard TT', serif;
+}
+.news-col-body {
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--ink-light);
+}
+
+/* Drop cap */
+.news-col-body::first-letter {
+  float: left;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 0.8;
+  margin: 4px 6px 0 0;
+  color: var(--red-headline);
+}
+
+/* ========================================================
+   MODAL
+   ======================================================== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(20,10,5,0.75);
+  z-index: 1000;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  overflow-y: auto;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--paper);
+  border: 2px solid var(--rule);
+  max-width: 680px;
+  width: 100%;
+  position: relative;
+  box-shadow: 8px 8px 0 var(--shadow-deep);
+}
+.modal-header {
+  padding: 14px 20px;
+  border-bottom: 2px double var(--rule);
+  background: var(--paper-dark);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--red-headline);
+  text-transform: uppercase;
+}
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--sepia);
+  line-height: 1;
+}
+.modal-close:hover { color: var(--red-headline); }
+.modal-body { padding: 20px; }
+
+.form-row { margin-bottom: 14px; }
+.form-label {
+  display: block;
+  font-family: 'Old Standard TT', serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--sepia);
+  margin-bottom: 4px;
+}
+.form-input {
+  width: 100%;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 13px;
+  padding: 7px 10px;
+  border: 1px solid var(--rule-light);
+  background: var(--paper);
+  color: var(--ink);
+  outline: none;
+}
+.form-input:focus { border-color: var(--red-headline); }
+.form-input-sm { height: 36px; }
+textarea.form-input { resize: vertical; min-height: 80px; }
+
+/* ========================================================
+   EMPTY STATE
+   ======================================================== */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--sepia);
+}
+.empty-state-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+.empty-state-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.empty-state-text { font-size: 13px; line-height: 1.6; }
+
+/* ========================================================
+   TOAST
+   ======================================================== */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.toast {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'Old Standard TT', serif;
+  font-size: 12px;
+  padding: 10px 16px;
+  border-left: 3px solid var(--gold);
+  box-shadow: 3px 3px 0 var(--shadow-deep);
+  animation: toastIn 0.3s ease;
+  max-width: 300px;
+}
+@keyframes toastIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+/* ========================================================
+   MOBILE
+   ======================================================== */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .sidebar.open { display: block; position: fixed; top: 0; left: 0; height: 100vh; z-index: 200; width: 260px; top: 0; }
+  .editor-body { columns: 1; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .main-content { padding: 16px 14px; }
+}
+
+/* ========================================================
+   PRINT
+   ======================================================== */
+@media print {
+  .masthead, .sidebar, .filter-bar, .card-actions, .editor-toolbar, .editor-footer { display: none !important; }
+  .editor-body { columns: 2; font-size: 12pt; line-height: 1.8; }
+  body { background: white; color: black; }
+}
+
+/* ========================================================
+   MISC
+   ======================================================== */
+.flex { display: flex; }
+.flex-wrap { flex-wrap: wrap; }
+.gap-8 { gap: 8px; }
+.mt-8 { margin-top: 8px; }
+.mt-16 { margin-top: 16px; }
+.mb-16 { margin-bottom: 16px; }
+.w-full { width: 100%; }
+.text-center { text-align: center; }
+
+.featured-stripe {
+  background: var(--red-headline);
+  color: var(--paper);
+  font-family: 'Old Standard TT', serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  padding: 3px 10px;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+/* Pending reading badge */
+.pending-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  display: inline-block;
+  margin-right: 4px;
+}
+
+/* Article columns view */
+.article-full {
+  max-width: 700px;
+  margin: 0 auto;
+}
+.article-full-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+.article-full-byline {
+  font-family: 'Old Standard TT', serif;
+  font-size: 11px;
+  color: var(--sepia);
+  font-style: italic;
+  margin-bottom: 4px;
+  border-top: 1px solid var(--rule-light);
+  border-bottom: 1px solid var(--rule-light);
+  padding: 5px 0;
+}
+.article-full-body {
+  font-size: 14px;
+  line-height: 1.85;
+  columns: 2;
+  column-gap: 28px;
+  column-rule: 1px solid var(--rule-light);
+  margin-top: 16px;
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  background: none;
+  border: 1px solid var(--rule);
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--ink);
+}
+@media (max-width: 768px) { .hamburger { display: block; } }
+
+</style>
+</head>
+<body>
+
+<!-- =====================================================
+     MASTHEAD
+     ===================================================== -->
+<header class="masthead">
+  <div class="masthead-top">
+    <span id="headerDate">—</span>
+    <span style="font-style:italic">«El análisis que el poder no quiere que leas»</span>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="hamburger" onclick="toggleSidebar()">☰</button>
+      <button class="btn btn-sm" onclick="openModal('modal-export-import')" title="Exportar o importar todo el archivo">💾 Archivo</button>
+      <button class="btn btn-sm" onclick="toggleDarkMode()">🌙 Oscuro</button>
+    </div>
+  </div>
+  <div class="masthead-title-area">
+    <h1 class="paper-title">⚑ AGENDA GEOPOLÍTICA XXI ⚑</h1>
+    <p class="paper-subtitle">Archivo personal de análisis internacional y pensamiento crítico</p>
+  </div>
+  <nav class="masthead-nav">
+    <a onclick="showSection('home')" class="active" id="nav-home">🗞 Portada</a>
+    <a onclick="showSection('noticias')" id="nav-noticias">📰 Noticias</a>
+    <a onclick="showSection('editor')" id="nav-editor">✍️ Editor</a>
+    <a onclick="showSection('articulos')" id="nav-articulos">📚 Artículos</a>
+    <a onclick="showSection('archivo')" id="nav-archivo">🗄 Hemeroteca</a>
+    <a onclick="showSection('pendientes')" id="nav-pendientes">📌 Pendientes</a>
+    <a onclick="showSection('destacados')" id="nav-destacados">⭐ Destacados</a>
+    <a onclick="showSection('agenda')" id="nav-agenda">📅 Agenda</a>
+    <a onclick="showSection('recomendados')" id="nav-recomendados">🔗 Recomendados</a>
+  </nav>
+</header>
+
+<!-- LAYOUT -->
+<div class="app-layout">
+
+  <!-- =====================================================
+       SIDEBAR
+       ===================================================== -->
+  <aside class="sidebar" id="sidebar">
+
+    <!-- Clock -->
+    <div class="vintage-clock">
+      <div class="clock-time" id="clockTime">00:00:00</div>
+      <div class="clock-date" id="clockDate">—</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stat-widget">
+      <div class="stat-number" id="statTotal">0</div>
+      <div class="stat-label">artículos archivados</div>
+    </div>
+
+    <!-- Filtros Región -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">🌎 Por Región</div>
+      <button class="sidebar-link active" id="reg-all" onclick="filterRegion('all', this)">Todas las regiones <span class="sidebar-count" id="cnt-all">0</span></button>
+      <button class="sidebar-link" id="reg-latam" onclick="filterRegion('América Latina', this)">🌿 América Latina <span class="sidebar-count" id="cnt-latam">0</span></button>
+      <button class="sidebar-link" id="reg-usa" onclick="filterRegion('Estados Unidos', this)">🦅 Estados Unidos <span class="sidebar-count" id="cnt-usa">0</span></button>
+      <button class="sidebar-link" id="reg-eu" onclick="filterRegion('Europa', this)">🏛 Europa <span class="sidebar-count" id="cnt-eu">0</span></button>
+      <button class="sidebar-link" id="reg-ru" onclick="filterRegion('Rusia', this)">❄️ Rusia <span class="sidebar-count" id="cnt-ru">0</span></button>
+      <button class="sidebar-link" id="reg-cn" onclick="filterRegion('China', this)">🐉 China <span class="sidebar-count" id="cnt-cn">0</span></button>
+      <button class="sidebar-link" id="reg-me" onclick="filterRegion('Medio Oriente', this)">🕌 Medio Oriente <span class="sidebar-count" id="cnt-me">0</span></button>
+      <button class="sidebar-link" id="reg-af" onclick="filterRegion('África', this)">🌍 África <span class="sidebar-count" id="cnt-af">0</span></button>
+      <button class="sidebar-link" id="reg-ap" onclick="filterRegion('Asia Pacífico', this)">🌏 Asia Pacífico <span class="sidebar-count" id="cnt-ap">0</span></button>
+    </div>
+
+    <!-- Filtros Temática -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">🔥 Por Temática</div>
+      <button class="sidebar-link" onclick="filterTopic('Guerra Irán-EEUU-Israel', this)">💥 Irán-EEUU-Israel</button>
+      <button class="sidebar-link" onclick="filterTopic('OTAN', this)">🛡 OTAN</button>
+      <button class="sidebar-link" onclick="filterTopic('BRICS', this)">📊 BRICS</button>
+      <button class="sidebar-link" onclick="filterTopic('Palestina', this)">🕊 Palestina</button>
+      <button class="sidebar-link" onclick="filterTopic('Ucrania-Rusia', this)">⚔️ Ucrania-Rusia</button>
+      <button class="sidebar-link" onclick="filterTopic('Crisis energética', this)">⚡ Crisis energética</button>
+      <button class="sidebar-link" onclick="filterTopic('Inteligencia artificial', this)">🤖 IA & Poder</button>
+      <button class="sidebar-link" onclick="filterTopic('Economía mundial', this)">💹 Economía mundial</button>
+      <button class="sidebar-link" onclick="filterTopic('Multipolaridad', this)">🌐 Multipolaridad</button>
+      <button class="sidebar-link" onclick="filterTopic('Colonialismo', this)">⛓ Colonialismo</button>
+      <button class="sidebar-link" onclick="filterTopic('Religión y geopolítica', this)">✝️ Religión & geopolítica</button>
+    </div>
+
+    <!-- Quick Note -->
+    <div class="sidebar-section">
+      <div class="sidebar-title">📝 Nota rápida</div>
+      <textarea class="quick-note-area" id="quickNote" placeholder="Anotación rápida..." oninput="saveQuickNote()"></textarea>
+    </div>
+  </aside>
+
+  <!-- =====================================================
+       MAIN CONTENT
+       ===================================================== -->
+  <main class="main-content">
+
+    <!-- =========== HOME / PORTADA =========== -->
+    <div class="section-page active" id="page-home">
+      <div style="margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:4px double var(--rule);padding-bottom:8px;margin-bottom:12px">
+          <div>
+            <span class="featured-stripe">✦ EDICIÓN DEL DÍA ✦</span>
+            <h2 style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--red-headline);text-transform:uppercase;letter-spacing:0.04em">Las últimas incorporaciones</h2>
+          </div>
+        </div>
+        <div id="homeColumns" class="newspaper-columns">
+          <div class="empty-state" style="break-inside:avoid">
+            <div class="empty-state-icon">📰</div>
+            <div class="empty-state-title">La redacción está vacía</div>
+            <div class="empty-state-text">Agregue noticias o escriba su primer artículo para ver el periódico en acción.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- World Map decorativo -->
+      <div class="vintage-divider"></div>
+      <div class="world-map-section">
+        <div class="sidebar-title" style="justify-content:center;margin-bottom:8px">🗺 ATLAS GEOPOLÍTICO — COBERTURA MUNDIAL</div>
+        <svg class="world-map-svg" viewBox="0 0 900 450" xmlns="http://www.w3.org/2000/svg">
+          <!-- Simplified world map paths for decorative purposes -->
+          <rect width="900" height="450" fill="#e8dcc0" rx="4"/>
+          <!-- Americas -->
+          <path d="M120,80 L160,70 L200,80 L220,120 L210,180 L190,220 L170,260 L150,300 L130,340 L110,360 L100,320 L90,280 L95,240 L100,200 L110,160 L115,120z" fill="#c4a870" stroke="#7c5c3a" stroke-width="1.5" opacity="0.7"/>
+          <path d="M130,340 L150,360 L170,400 L160,420 L140,415 L125,395 L120,365z" fill="#c4a870" stroke="#7c5c3a" stroke-width="1.5" opacity="0.7"/>
+          <!-- Europe -->
+          <path d="M380,80 L430,75 L450,90 L440,120 L420,140 L400,150 L380,145 L365,130 L360,110 L370,90z" fill="#c4a870" stroke="#7c5c3a" stroke-width="1.5" opacity="0.7"/>
+          <!-- Africa -->
+          <path d="M380,160 L430,155 L460,170 L470,220 L460,280 L440,330 L410,360 L390,355 L370,330 L360,280 L355,220 L360,170z" fill="#c4a870" stroke="#7c5c3a" stroke-width="1.5" opacity="0.7"/>
+          <!-- Asia -->
+          <path d="M460,80 L560,70 L640,80 L700,100 L720,140 L700,180 L660,200 L600,195 L540,180 L490,160 L460,140 L450,110z" fill="#c4a870" stroke="#7c5c3a" stroke-width="1.5" opacity="0.7"/>
+          <!-- Russia -->
+          <path d="M460,50 L700,40 L780,55 L800,80 L750,95 L700,100 L640,80 L560,70 L460,80 L450,65z" fill="#b89a60" stroke="#7c5c3a" stroke-width="1.5" opacity="0.7"/>
+          <!-- Oceania -->
+          <path d="M640,280 L700,275 L730,290 L720,330 L680,340 L645,325 L630,305z" fill="#c4a870" stroke="#7c5c3a" stroke-width="1.5" opacity="0.7"/>
+          <!-- Middle East -->
+          <path d="M460,155 L510,150 L530,165 L525,200 L510,215 L485,210 L462,195 L455,175z" fill="#c4a870" stroke="#7c5c3a" stroke-width="1.5" opacity="0.7"/>
+          <!-- Labels -->
+          <text x="150" y="200" font-family="Georgia,serif" font-size="10" fill="#7c5c3a" text-anchor="middle" opacity="0.8" transform="rotate(-15,150,200)">AMÉRICAS</text>
+          <text x="405" y="115" font-family="Georgia,serif" font-size="9" fill="#7c5c3a" text-anchor="middle" opacity="0.8">EUROPA</text>
+          <text x="408" y="265" font-family="Georgia,serif" font-size="10" fill="#7c5c3a" text-anchor="middle" opacity="0.8">ÁFRICA</text>
+          <text x="590" y="135" font-family="Georgia,serif" font-size="11" fill="#7c5c3a" text-anchor="middle" opacity="0.8">ASIA</text>
+          <text x="615" y="62" font-family="Georgia,serif" font-size="9" fill="#7c5c3a" text-anchor="middle" opacity="0.8">RUSIA</text>
+          <text x="688" y="308" font-family="Georgia,serif" font-size="8" fill="#7c5c3a" text-anchor="middle" opacity="0.8">OCEANÍA</text>
+          <text x="492" y="185" font-family="Georgia,serif" font-size="8" fill="#7c5c3a" text-anchor="middle" opacity="0.8">OR.</text>
+          <!-- Grid lines -->
+          <line x1="0" y1="225" x2="900" y2="225" stroke="#7c5c3a" stroke-width="0.5" stroke-dasharray="3,5" opacity="0.4"/>
+          <line x1="450" y1="0" x2="450" y2="450" stroke="#7c5c3a" stroke-width="0.5" stroke-dasharray="3,5" opacity="0.4"/>
+          <!-- Border -->
+          <rect width="900" height="450" fill="none" stroke="#7c5c3a" stroke-width="2" rx="4"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- =========== NOTICIAS =========== -->
+    <div class="section-page" id="page-noticias">
+      <div class="section-header">
+        <h2 class="section-headline">📰 Noticias Archivadas</h2>
+        <span class="section-sub">Curaduría de análisis internacional</span>
+        <button class="btn btn-primary" style="margin-left:auto" onclick="openModal('modal-add-news')">➕ Agregar noticia</button>
+      </div>
+
+      <div class="filter-bar">
+        <input type="text" placeholder="🔍 Buscar por título, fuente o tema..." id="searchNews" oninput="renderNews()">
+        <select id="filterRegionNews" onchange="renderNews()">
+          <option value="">Todas las regiones</option>
+          <option>América Latina</option>
+          <option>Estados Unidos</option>
+          <option>Europa</option>
+          <option>Rusia</option>
+          <option>China</option>
+          <option>Medio Oriente</option>
+          <option>África</option>
+          <option>Asia Pacífico</option>
+        </select>
+        <select id="filterTopicNews" onchange="renderNews()">
+          <option value="">Todas las temáticas</option>
+          <option>Guerra Irán-EEUU-Israel</option>
+          <option>OTAN</option>
+          <option>BRICS</option>
+          <option>Palestina</option>
+          <option>Ucrania-Rusia</option>
+          <option>Crisis energética</option>
+          <option>Inteligencia artificial</option>
+          <option>Economía mundial</option>
+          <option>Multipolaridad</option>
+          <option>Colonialismo</option>
+          <option>Religión y geopolítica</option>
+        </select>
+        <input type="date" id="filterDateNews" onchange="renderNews()" title="Filtrar por fecha">
+        <button class="btn btn-ghost" onclick="clearFilters()">✕ Limpiar</button>
+      </div>
+
+      <div class="cards-grid" id="newsGrid">
+        <div class="empty-state" style="grid-column:1/-1">
+          <div class="empty-state-icon">🗞</div>
+          <div class="empty-state-title">Sin noticias archivadas</div>
+          <div class="empty-state-text">Haga clic en «Agregar noticia» para comenzar su archivo periodístico.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========== EDITOR =========== -->
+    <div class="section-page" id="page-editor">
+      <div class="section-header">
+        <h2 class="section-headline">✍️ Editor Periodístico</h2>
+        <span class="section-sub">Redacción de artículos propios</span>
+        <div style="margin-left:auto;display:flex;gap:6px">
+          <button class="btn" onclick="newArticle()">📄 Nuevo</button>
+          <button class="btn btn-primary" onclick="saveArticle()">💾 Guardar</button>
+        </div>
+      </div>
+
+      <div class="editor-container">
+        <div class="editor-header">
+          <input type="text" id="edTitle" placeholder="TÍTULO DEL ARTÍCULO — En letras de imprenta…">
+          <div class="editor-meta-row">
+            <input type="text" id="edAuthor" placeholder="Autor / Corresponsal">
+            <input type="date" id="edDate">
+            <select id="edRegion">
+              <option value="">— Región —</option>
+              <option>América Latina</option>
+              <option>Estados Unidos</option>
+              <option>Europa</option>
+              <option>Rusia</option>
+              <option>China</option>
+              <option>Medio Oriente</option>
+              <option>África</option>
+              <option>Asia Pacífico</option>
+            </select>
+            <select id="edTopic">
+              <option value="">— Temática —</option>
+              <option>Guerra Irán-EEUU-Israel</option>
+              <option>OTAN</option>
+              <option>BRICS</option>
+              <option>Palestina</option>
+              <option>Ucrania-Rusia</option>
+              <option>Crisis energética</option>
+              <option>Inteligencia artificial</option>
+              <option>Economía mundial</option>
+              <option>Multipolaridad</option>
+              <option>Colonialismo</option>
+              <option>Religión y geopolítica</option>
+            </select>
+            <input type="text" id="edTags" placeholder="Etiquetas (separadas por coma)">
+          </div>
+        </div>
+
+        <div class="editor-toolbar">
+          <button onclick="execCmd('bold')" title="Negrita"><b>N</b></button>
+          <button onclick="execCmd('italic')" title="Cursiva"><i>C</i></button>
+          <button onclick="execCmd('underline')" title="Subrayado"><u>S</u></button>
+          <div class="sep"></div>
+          <button onclick="execCmd('formatBlock','h2')" title="Título">H2</button>
+          <button onclick="execCmd('formatBlock','h3')" title="Subtítulo">H3</button>
+          <button onclick="execCmd('formatBlock','p')" title="Párrafo">P</button>
+          <div class="sep"></div>
+          <button onclick="execCmd('insertUnorderedList')" title="Lista">≡</button>
+          <button onclick="execCmd('insertOrderedList')" title="Lista num.">1.</button>
+          <div class="sep"></div>
+          <button onclick="insertLink()" title="Insertar enlace">🔗</button>
+          <button onclick="insertImageEd()" title="Insertar imagen">🖼</button>
+          <div class="sep"></div>
+          <button onclick="execCmd('justifyLeft')">⬅</button>
+          <button onclick="execCmd('justifyFull')">⬛</button>
+          <div class="sep"></div>
+          <button onclick="exportToPDF()" title="Exportar PDF">📄 PDF</button>
+          <button onclick="printArticle()" title="Imprimir">🖨 Imprimir</button>
+        </div>
+
+        <div class="editor-body" id="edBody" contenteditable="true"></div>
+
+        <div class="editor-footer">
+          <span style="font-family:'Old Standard TT',serif;font-size:11px;color:var(--sepia)" id="edWordCount">0 palabras</span>
+          <div style="margin-left:auto;display:flex;gap:6px">
+            <label style="font-family:'Old Standard TT',serif;font-size:11px;color:var(--sepia);display:flex;align-items:center;gap:4px">
+              <input type="checkbox" id="edFeatured"> Destacado
+            </label>
+            <label style="font-family:'Old Standard TT',serif;font-size:11px;color:var(--sepia);display:flex;align-items:center;gap:4px">
+              <input type="checkbox" id="edPending"> Pendiente de revisión
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:8px;font-family:'Old Standard TT',serif;font-size:10px;color:var(--sepia);text-align:center;font-style:italic">
+        Artículo editando: <span id="edCurrentId">nuevo</span>
+      </div>
+    </div>
+
+    <!-- =========== ARTÍCULOS PROPIOS =========== -->
+    <div class="section-page" id="page-articulos">
+      <div class="section-header">
+        <h2 class="section-headline">📚 Artículos Propios</h2>
+        <span class="section-sub">Producción intelectual archivada</span>
+        <button class="btn btn-primary" style="margin-left:auto" onclick="showSection('editor')">✍️ Nuevo artículo</button>
+      </div>
+      <div class="filter-bar">
+        <input type="text" placeholder="🔍 Buscar artículos..." id="searchArticles" oninput="renderArticles()">
+        <select id="filterRegionArticles" onchange="renderArticles()">
+          <option value="">Todas las regiones</option>
+          <option>América Latina</option>
+          <option>Estados Unidos</option>
+          <option>Europa</option>
+          <option>Rusia</option>
+          <option>China</option>
+          <option>Medio Oriente</option>
+          <option>África</option>
+          <option>Asia Pacífico</option>
+        </select>
+      </div>
+      <div class="cards-grid" id="articlesGrid"></div>
+    </div>
+
+    <!-- =========== HEMEROTECA =========== -->
+    <div class="section-page" id="page-archivo">
+      <div class="section-header">
+        <h2 class="section-headline">🗄 Hemeroteca</h2>
+        <span class="section-sub">Cronología de eventos internacionales</span>
+      </div>
+      <div class="timeline" id="timelineContainer">
+        <div class="empty-state">
+          <div class="empty-state-icon">🕰</div>
+          <div class="empty-state-title">El archivo cronológico está vacío</div>
+          <div class="empty-state-text">Los artículos y noticias guardados aparecerán aquí en orden cronológico.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========== PENDIENTES =========== -->
+    <div class="section-page" id="page-pendientes">
+      <div class="section-header">
+        <h2 class="section-headline">📌 Lecturas Pendientes</h2>
+        <span class="section-sub">Material por leer y analizar</span>
+      </div>
+      <div class="cards-grid" id="pendingGrid">
+        <div class="empty-state" style="grid-column:1/-1">
+          <div class="empty-state-icon">📌</div>
+          <div class="empty-state-title">Sin lecturas pendientes</div>
+          <div class="empty-state-text">Marque artículos o noticias como «Pendiente» para verlos aquí.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========== DESTACADOS =========== -->
+    <div class="section-page" id="page-destacados">
+      <div class="section-header">
+        <h2 class="section-headline">⭐ Artículos Destacados</h2>
+        <span class="section-sub">Selección editorial personal</span>
+      </div>
+      <div class="cards-grid" id="featuredGrid">
+        <div class="empty-state" style="grid-column:1/-1">
+          <div class="empty-state-icon">⭐</div>
+          <div class="empty-state-title">Sin artículos destacados</div>
+          <div class="empty-state-text">Marque artículos o noticias como favoritos para encontrarlos aquí.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========== AGENDA DEL DÍA =========== -->
+    <div class="section-page" id="page-agenda">
+      <div class="section-header">
+        <h2 class="section-headline">📅 Agenda del Día</h2>
+        <span class="section-sub">Compromisos y seguimiento</span>
+        <button class="btn btn-primary" style="margin-left:auto" onclick="openModal('modal-add-agenda')">➕ Agregar</button>
+      </div>
+
+      <div class="agenda-header">
+        <div class="agenda-date-display" id="agendaDateDisplay">—</div>
+        <input type="date" id="agendaDateFilter" onchange="renderAgenda()" style="font-family:'Libre Baskerville',serif;font-size:12px;padding:4px 8px;border:1px solid var(--rule-light);background:var(--paper);color:var(--ink)">
+      </div>
+
+      <div id="agendaList"></div>
+    </div>
+
+    <!-- =========== RECOMENDADOS =========== -->
+    <div class="section-page" id="page-recomendados">
+      <div class="section-header">
+        <h2 class="section-headline">🔗 Recomendados</h2>
+        <span class="section-sub">Sitios de análisis y fuentes independientes</span>
+        <button class="btn btn-primary" style="margin-left:auto" onclick="openModal('modal-add-rec')">➕ Agregar sitio</button>
+      </div>
+
+      <div class="rec-grid" id="recGrid">
+        <div class="empty-state" style="grid-column:1/-1">
+          <div class="empty-state-icon">🔗</div>
+          <div class="empty-state-title">Sin sitios recomendados</div>
+          <div class="empty-state-text">Agregue fuentes de análisis, medios independientes y sitios de referencia.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- =====================================================
+     TOAST CONTAINER
+     ===================================================== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- =====================================================
+     MODALS
+     ===================================================== -->
+
+<!-- Modal: Agregar Noticia -->
+<div class="modal-overlay" id="modal-add-news">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">📰 Agregar Noticia</span>
+      <button class="modal-close" onclick="closeModal('modal-add-news')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label class="form-label">Título *</label>
+        <input type="text" class="form-input" id="n-title" placeholder="Titular de la noticia">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="form-row">
+          <label class="form-label">Fuente / Medio</label>
+          <input type="text" class="form-input form-input-sm" id="n-source" placeholder="The Guardian, RT, etc.">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Autor</label>
+          <input type="text" class="form-input form-input-sm" id="n-author" placeholder="Nombre del autor">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="form-row">
+          <label class="form-label">Fecha</label>
+          <input type="date" class="form-input form-input-sm" id="n-date">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Región</label>
+          <select class="form-input form-input-sm" id="n-region">
+            <option value="">— Seleccionar —</option>
+            <option>América Latina</option>
+            <option>Estados Unidos</option>
+            <option>Europa</option>
+            <option>Rusia</option>
+            <option>China</option>
+            <option>Medio Oriente</option>
+            <option>África</option>
+            <option>Asia Pacífico</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Temática</label>
+        <select class="form-input form-input-sm" id="n-topic">
+          <option value="">— Seleccionar —</option>
+          <option>Guerra Irán-EEUU-Israel</option>
+          <option>OTAN</option>
+          <option>BRICS</option>
+          <option>Palestina</option>
+          <option>Ucrania-Rusia</option>
+          <option>Crisis energética</option>
+          <option>Inteligencia artificial</option>
+          <option>Economía mundial</option>
+          <option>Multipolaridad</option>
+          <option>Colonialismo</option>
+          <option>Religión y geopolítica</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Enlace original</label>
+        <input type="url" class="form-input form-input-sm" id="n-url" placeholder="https://...">
+      </div>
+      <div class="form-row">
+        <label class="form-label">URL de imagen destacada</label>
+        <input type="url" class="form-input form-input-sm" id="n-img" placeholder="https://...jpg">
+      </div>
+      <div class="form-row">
+        <label class="form-label">Etiquetas (separadas por coma)</label>
+        <input type="text" class="form-input form-input-sm" id="n-tags" placeholder="otan, diplomacia, conflicto">
+      </div>
+      <div class="form-row">
+        <label class="form-label">Resumen</label>
+        <textarea class="form-input" id="n-summary" rows="3" placeholder="Resumen o análisis personal de la noticia..."></textarea>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+        <button class="btn btn-ghost" onclick="closeModal('modal-add-news')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveNews()">💾 Guardar noticia</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Agregar Recomendado -->
+<div class="modal-overlay" id="modal-add-rec">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">🔗 Agregar Sitio Recomendado</span>
+      <button class="modal-close" onclick="closeModal('modal-add-rec')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label class="form-label">Nombre del sitio *</label>
+        <input type="text" class="form-input form-input-sm" id="r-name" placeholder="The Intercept, CELAG, etc.">
+      </div>
+      <div class="form-row">
+        <label class="form-label">URL *</label>
+        <input type="url" class="form-input form-input-sm" id="r-url" placeholder="https://...">
+      </div>
+      <div class="form-row">
+        <label class="form-label">Categoría / Tipo</label>
+        <input type="text" class="form-input form-input-sm" id="r-cat" placeholder="Análisis, Think tank, Alternativo, etc.">
+      </div>
+      <div class="form-row">
+        <label class="form-label">Descripción</label>
+        <textarea class="form-input" id="r-desc" rows="3" placeholder="¿Por qué es valioso este sitio?"></textarea>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+        <button class="btn btn-ghost" onclick="closeModal('modal-add-rec')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveRec()">💾 Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Agenda -->
+<div class="modal-overlay" id="modal-add-agenda">
+  <div class="modal-box" style="max-width:480px">
+    <div class="modal-header">
+      <span class="modal-title">📅 Nueva entrada de agenda</span>
+      <button class="modal-close" onclick="closeModal('modal-add-agenda')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label class="form-label">Descripción *</label>
+        <input type="text" class="form-input form-input-sm" id="ag-text" placeholder="Tarea, nota, evento...">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="form-row">
+          <label class="form-label">Fecha</label>
+          <input type="date" class="form-input form-input-sm" id="ag-date">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Hora</label>
+          <input type="time" class="form-input form-input-sm" id="ag-time">
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+        <button class="btn btn-ghost" onclick="closeModal('modal-add-agenda')">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveAgendaItem()">💾 Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: View Article -->
+<div class="modal-overlay" id="modal-view-article">
+  <div class="modal-box" style="max-width:800px">
+    <div class="modal-header">
+      <span class="modal-title">📄 Artículo</span>
+      <button class="modal-close" onclick="closeModal('modal-view-article')">✕</button>
+    </div>
+    <div class="modal-body" id="modal-article-content"></div>
+  </div>
+</div>
+
+<!-- Modal: Exportar / Importar -->
+<div class="modal-overlay" id="modal-export-import">
+  <div class="modal-box" style="max-width:560px">
+    <div class="modal-header">
+      <span class="modal-title">💾 Exportar / Importar Archivo</span>
+      <button class="modal-close" onclick="closeModal('modal-export-import')">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Info banner -->
+      <div style="background:var(--paper-dark);border-left:3px solid var(--gold);padding:10px 14px;margin-bottom:20px;font-family:'Old Standard TT',serif;font-size:11px;color:var(--sepia);line-height:1.6">
+        <strong style="color:var(--ink)">ℹ️ Acerca del almacenamiento en Vercel:</strong><br>
+        Este dashboard guarda los datos en el <em>LocalStorage</em> del navegador, que es local a cada dispositivo y sesión. Para llevar su archivo entre dispositivos o hacer una copia de seguridad, use las opciones de exportar e importar a continuación.
+      </div>
+
+      <!-- EXPORTAR -->
+      <div style="margin-bottom:24px">
+        <div class="sidebar-title" style="font-size:13px;margin-bottom:10px">📤 EXPORTAR</div>
+        <p style="font-size:12px;color:var(--ink-light);margin-bottom:12px;line-height:1.6">Descarga todo el contenido del archivo —noticias, artículos, recomendados, agenda y notas— en un único archivo <code>.json</code> que podrá guardar y restaurar cuando lo necesite.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="exportData()">📥 Descargar archivo JSON</button>
+          <button class="btn btn-ghost" onclick="exportDataClipboard()">📋 Copiar al portapapeles</button>
+        </div>
+        <div id="exportStats" style="margin-top:10px;font-family:'Old Standard TT',serif;font-size:10px;color:var(--sepia);font-style:italic"></div>
+      </div>
+
+      <div class="vintage-divider"></div>
+
+      <!-- IMPORTAR -->
+      <div style="margin-top:20px">
+        <div class="sidebar-title" style="font-size:13px;margin-bottom:10px">📤 IMPORTAR</div>
+        <p style="font-size:12px;color:var(--ink-light);margin-bottom:12px;line-height:1.6">Seleccione un archivo <code>.json</code> previamente exportado desde este dashboard. Puede elegir <em>reemplazar</em> todo el contenido actual o <em>fusionar</em> con lo que ya existe (sin duplicar).</p>
+
+        <div class="form-row">
+          <label class="form-label">Modo de importación</label>
+          <select class="form-input form-input-sm" id="importMode">
+            <option value="merge">🔀 Fusionar (conserva datos actuales, agrega los nuevos)</option>
+            <option value="replace">♻️ Reemplazar (borra todo y carga el archivo)</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Seleccionar archivo JSON</label>
+          <input type="file" id="importFile" accept=".json,application/json" class="form-input form-input-sm" style="padding:4px 8px">
+        </div>
+
+        <div id="importPreview" style="display:none;background:var(--paper-dark);border:1px solid var(--rule-light);padding:10px;margin-bottom:10px;font-family:'Old Standard TT',serif;font-size:11px;color:var(--sepia)"></div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-ghost" onclick="previewImport()">👁 Previsualizar</button>
+          <button class="btn btn-primary" onclick="importData()">⬆️ Importar datos</button>
+        </div>
+
+        <div style="margin-top:12px">
+          <div class="sidebar-title" style="font-size:11px;margin-bottom:6px">— O pegar JSON directamente —</div>
+          <textarea class="form-input" id="importPaste" rows="4" placeholder='Pegue aquí el contenido JSON exportado...'></textarea>
+          <div style="display:flex;gap:8px;margin-top:6px">
+            <button class="btn btn-ghost" onclick="previewPastedImport()">👁 Previsualizar pegado</button>
+            <button class="btn btn-primary" onclick="importPastedData()">⬆️ Importar pegado</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
+<script>
+// ============================================================
+// DATA STORE (LocalStorage)
+// ============================================================
+const KEYS = { news: 'agxxi_news', articles: 'agxxi_articles', recs: 'agxxi_recs', agenda: 'agxxi_agenda', quickNote: 'agxxi_quicknote' };
+
+function load(key) { try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; } }
+function save(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
+
+let currentFilter = { region: 'all', topic: '' };
+let editingArticleId = null;
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showSection(id) {
+  document.querySelectorAll('.section-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.masthead-nav a').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + id)?.classList.add('active');
+  document.getElementById('nav-' + id)?.classList.add('active');
+  closeSidebar();
+  if (id === 'home') renderHome();
+  if (id === 'noticias') renderNews();
+  if (id === 'articulos') renderArticles();
+  if (id === 'archivo') renderTimeline();
+  if (id === 'pendientes') renderPending();
+  if (id === 'destacados') renderFeatured();
+  if (id === 'agenda') renderAgenda();
+  if (id === 'recomendados') renderRecs();
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+// ============================================================
+// CLOCK
+// ============================================================
+function updateClock() {
+  const now = new Date();
+  const days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const t = now.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const d = `${days[now.getDay()]}, ${now.getDate()} de ${months[now.getMonth()]} de ${now.getFullYear()}`;
+  document.getElementById('clockTime').textContent = t;
+  document.getElementById('clockDate').textContent = d;
+  document.getElementById('headerDate').textContent = `${now.getDate()} ${months[now.getMonth()].substring(0,3).toUpperCase()}. ${now.getFullYear()}`;
+  document.getElementById('agendaDateDisplay').textContent = d;
+  // Set default date for agenda filter
+  if (!document.getElementById('agendaDateFilter').value) {
+    document.getElementById('agendaDateFilter').value = now.toISOString().split('T')[0];
+  }
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ============================================================
+// QUICK NOTE
+// ============================================================
+function saveQuickNote() {
+  localStorage.setItem(KEYS.quickNote, document.getElementById('quickNote').value);
+}
+document.getElementById('quickNote').value = localStorage.getItem(KEYS.quickNote) || '';
+
+// ============================================================
+// STATS
+// ============================================================
+function updateStats() {
+  const news = load(KEYS.news);
+  const arts = load(KEYS.articles);
+  const total = news.length + arts.length;
+  document.getElementById('statTotal').textContent = total;
+
+  const regions = ['América Latina','Estados Unidos','Europa','Rusia','China','Medio Oriente','África','Asia Pacífico'];
+  const regMap = {
+    'América Latina': 'latam', 'Estados Unidos': 'usa', 'Europa': 'eu',
+    'Rusia': 'ru', 'China': 'cn', 'Medio Oriente': 'me', 'África': 'af', 'Asia Pacífico': 'ap'
+  };
+  const all = [...news, ...arts];
+  document.getElementById('cnt-all').textContent = all.length;
+  regions.forEach(r => {
+    const cnt = all.filter(x => x.region === r).length;
+    const el = document.getElementById('cnt-' + regMap[r]);
+    if (el) el.textContent = cnt;
+  });
+}
+
+// ============================================================
+// MODALS
+// ============================================================
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  // Set today's date for relevant inputs
+  const today = new Date().toISOString().split('T')[0];
+  const dateInputs = document.querySelectorAll(`#${id} input[type=date]`);
+  dateInputs.forEach(i => { if (!i.value) i.value = today; });
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+// Close on backdrop click
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+// ============================================================
+// DARK MODE
+// ============================================================
+function toggleDarkMode() {
+  document.body.classList.toggle('dark-mode');
+  const btn = document.querySelector('[onclick="toggleDarkMode()"]');
+  btn.textContent = document.body.classList.contains('dark-mode') ? '☀️ Claro' : '🌙 Oscuro';
+  localStorage.setItem('agxxi_darkmode', document.body.classList.contains('dark-mode') ? '1' : '0');
+}
+if (localStorage.getItem('agxxi_darkmode') === '1') {
+  document.body.classList.add('dark-mode');
+  const btn = document.querySelector('[onclick="toggleDarkMode()"]');
+  if (btn) btn.textContent = '☀️ Claro';
+}
+
+// ============================================================
+// NEWS — SAVE
+// ============================================================
+function saveNews() {
+  const title = document.getElementById('n-title').value.trim();
+  if (!title) { toast('⚠ El título es obligatorio.'); return; }
+  const news = load(KEYS.news);
+  const item = {
+    id: Date.now(),
+    title,
+    source: document.getElementById('n-source').value.trim(),
+    author: document.getElementById('n-author').value.trim(),
+    date: document.getElementById('n-date').value,
+    region: document.getElementById('n-region').value,
+    topic: document.getElementById('n-topic').value,
+    url: document.getElementById('n-url').value.trim(),
+    img: document.getElementById('n-img').value.trim(),
+    tags: document.getElementById('n-tags').value.split(',').map(t => t.trim()).filter(Boolean),
+    summary: document.getElementById('n-summary').value.trim(),
+    favorite: false,
+    pending: false,
+    type: 'news'
+  };
+  news.unshift(item);
+  save(KEYS.news, news);
+  closeModal('modal-add-news');
+  clearNewsForm();
+  renderNews();
+  updateStats();
+  renderHome();
+  toast('✅ Noticia archivada con éxito.');
+}
+
+function clearNewsForm() {
+  ['n-title','n-source','n-author','n-date','n-region','n-topic','n-url','n-img','n-tags','n-summary'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+}
+
+// ============================================================
+// NEWS — RENDER
+// ============================================================
+function renderNews() {
+  const news = load(KEYS.news);
+  const search = document.getElementById('searchNews')?.value.toLowerCase() || '';
+  const region = document.getElementById('filterRegionNews')?.value || '';
+  const topic = document.getElementById('filterTopicNews')?.value || '';
+  const date = document.getElementById('filterDateNews')?.value || '';
+
+  let filtered = news.filter(n => {
+    const matchSearch = !search || n.title.toLowerCase().includes(search) || (n.source || '').toLowerCase().includes(search) || (n.summary || '').toLowerCase().includes(search);
+    const matchRegion = !region || n.region === region;
+    const matchTopic = !topic || n.topic === topic;
+    const matchDate = !date || n.date === date;
+    if (currentFilter.region !== 'all') return matchSearch && n.region === currentFilter.region && matchTopic && matchDate;
+    if (currentFilter.topic) return matchSearch && matchRegion && n.topic === currentFilter.topic && matchDate;
+    return matchSearch && matchRegion && matchTopic && matchDate;
+  });
+
+  const grid = document.getElementById('newsGrid');
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">🗞</div><div class="empty-state-title">Sin resultados</div><div class="empty-state-text">Intente con otros filtros.</div></div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(n => newsCard(n)).join('');
+}
+
+function newsCard(n) {
+  const img = n.img ? `<img class="card-image" src="${n.img}" alt="${n.title}" onerror="this.parentNode.innerHTML='<div class=card-image-placeholder>📰</div>'">` : `<div class="card-image-placeholder">📰</div>`;
+  const tags = n.tags?.length ? `<div class="card-tags">${n.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : '';
+  return `
+  <div class="card" id="card-${n.id}">
+    ${n.favorite ? '<div class="card-featured-badge">★ Favorito</div>' : ''}
+    ${img}
+    <div class="card-body">
+      <div class="card-region">${n.region || ''} ${n.topic ? '· ' + n.topic : ''}</div>
+      <h3 class="card-title">${n.url ? `<a href="${n.url}" target="_blank">${n.title}</a>` : n.title}</h3>
+      <div class="card-meta">${n.date ? formatDate(n.date) + ' · ' : ''}${n.source || ''}${n.author ? ' · ' + n.author : ''}</div>
+      ${n.summary ? `<p class="card-summary">${n.summary}</p>` : ''}
+      ${tags}
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-sm favorite-btn ${n.favorite ? 'active' : ''}" onclick="toggleFavoriteNews(${n.id})">★ Fav</button>
+      <button class="btn btn-sm ${n.pending ? 'btn-primary' : 'btn-ghost'}" onclick="togglePendingNews(${n.id})">📌 ${n.pending ? 'Pendiente' : 'Marcar'}</button>
+      ${n.url ? `<button class="btn btn-sm btn-ghost" onclick="shareLink('${n.url}')">🔗 Compartir</button>` : ''}
+      <button class="btn btn-sm btn-ghost" style="margin-left:auto;color:#b80000" onclick="deleteNews(${n.id})">✕</button>
+    </div>
+  </div>`;
+}
+
+function toggleFavoriteNews(id) {
+  const news = load(KEYS.news);
+  const i = news.findIndex(n => n.id === id);
+  if (i > -1) { news[i].favorite = !news[i].favorite; save(KEYS.news, news); renderNews(); renderFeatured(); toast(news[i].favorite ? '★ Marcado como favorito.' : '☆ Quitado de favoritos.'); }
+}
+function togglePendingNews(id) {
+  const news = load(KEYS.news);
+  const i = news.findIndex(n => n.id === id);
+  if (i > -1) { news[i].pending = !news[i].pending; save(KEYS.news, news); renderNews(); renderPending(); toast(news[i].pending ? '📌 Marcado como pendiente.' : '✓ Quitado de pendientes.'); }
+}
+function deleteNews(id) {
+  if (!confirm('¿Eliminar esta noticia del archivo?')) return;
+  const news = load(KEYS.news).filter(n => n.id !== id);
+  save(KEYS.news, news);
+  renderNews(); renderHome(); renderTimeline(); updateStats();
+  toast('🗑 Noticia eliminada.');
+}
+
+function clearFilters() {
+  ['searchNews','filterRegionNews','filterTopicNews','filterDateNews'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  currentFilter = { region: 'all', topic: '' };
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('reg-all')?.classList.add('active');
+  renderNews();
+}
+
+// ============================================================
+// SIDEBAR FILTERS
+// ============================================================
+function filterRegion(r, btn) {
+  currentFilter = { region: r, topic: '' };
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  btn.classList.add('active');
+  showSection('noticias');
+}
+function filterTopic(t, btn) {
+  currentFilter = { region: 'all', topic: t };
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  btn.classList.add('active');
+  showSection('noticias');
+}
+
+// ============================================================
+// EDITOR
+// ============================================================
+function execCmd(cmd, val) {
+  document.getElementById('edBody').focus();
+  document.execCommand(cmd, false, val || null);
+}
+function insertLink() {
+  const url = prompt('URL del enlace:');
+  if (!url) return;
+  document.execCommand('createLink', false, url);
+  // Set target="_blank" on every anchor inside the editor that aún no lo tenga
+  document.getElementById('edBody').querySelectorAll('a:not([target])').forEach(a => {
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener noreferrer');
+  });
+}
+function insertImageEd() {
+  const url = prompt('URL de la imagen:');
+  if (url) document.execCommand('insertImage', false, url);
+}
+
+document.getElementById('edBody').addEventListener('input', function() {
+  const text = this.innerText || '';
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  document.getElementById('edWordCount').textContent = `${words} palabras`;
+});
+
+function newArticle() {
+  editingArticleId = null;
+  document.getElementById('edTitle').value = '';
+  document.getElementById('edAuthor').value = '';
+  document.getElementById('edDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('edRegion').value = '';
+  document.getElementById('edTopic').value = '';
+  document.getElementById('edTags').value = '';
+  document.getElementById('edBody').innerHTML = '';
+  document.getElementById('edFeatured').checked = false;
+  document.getElementById('edPending').checked = false;
+  document.getElementById('edCurrentId').textContent = 'nuevo';
+  toast('📄 Nuevo artículo iniciado.');
+}
+
+function saveArticle() {
+  const title = document.getElementById('edTitle').value.trim();
+  if (!title) { toast('⚠ El título es obligatorio.'); return; }
+  const articles = load(KEYS.articles);
+  const article = {
+    id: editingArticleId || Date.now(),
+    title,
+    author: document.getElementById('edAuthor').value.trim(),
+    date: document.getElementById('edDate').value,
+    region: document.getElementById('edRegion').value,
+    topic: document.getElementById('edTopic').value,
+    tags: document.getElementById('edTags').value.split(',').map(t => t.trim()).filter(Boolean),
+    body: ensureExternalLinks(document.getElementById('edBody').innerHTML),
+    favorite: document.getElementById('edFeatured').checked,
+    pending: document.getElementById('edPending').checked,
+    type: 'article',
+    updated: Date.now()
+  };
+  if (editingArticleId) {
+    const i = articles.findIndex(a => a.id === editingArticleId);
+    if (i > -1) articles[i] = article; else articles.unshift(article);
+  } else {
+    articles.unshift(article);
+    editingArticleId = article.id;
+  }
+  save(KEYS.articles, articles);
+  document.getElementById('edCurrentId').textContent = article.id;
+  updateStats();
+  renderHome();
+  renderTimeline();
+  toast('✅ Artículo guardado exitosamente.');
+}
+
+function editArticle(id) {
+  const articles = load(KEYS.articles);
+  const a = articles.find(x => x.id === id);
+  if (!a) return;
+  editingArticleId = id;
+  document.getElementById('edTitle').value = a.title;
+  document.getElementById('edAuthor').value = a.author || '';
+  document.getElementById('edDate').value = a.date || '';
+  document.getElementById('edRegion').value = a.region || '';
+  document.getElementById('edTopic').value = a.topic || '';
+  document.getElementById('edTags').value = (a.tags || []).join(', ');
+  document.getElementById('edBody').innerHTML = ensureExternalLinks(a.body || '');
+  document.getElementById('edPending').checked = a.pending || false;
+  document.getElementById('edCurrentId').textContent = id;
+  showSection('editor');
+  toast('✏️ Artículo cargado para edición.');
+}
+
+function viewArticle(id) {
+  const articles = load(KEYS.articles);
+  const a = articles.find(x => x.id === id);
+  if (!a) return;
+  const content = `
+    <div class="article-full">
+      <div class="article-full-title">${a.title}</div>
+      <div class="article-full-byline">${a.region ? '◆ ' + a.region + (a.topic ? ' · ' + a.topic : '') + ' — ' : ''}${a.date ? formatDate(a.date) : ''}${a.author ? ' · ' + a.author : ''}</div>
+      <div class="article-full-body">${ensureExternalLinks(a.body || '')}</div>
+    </div>`;
+  document.getElementById('modal-article-content').innerHTML = content;
+  openModal('modal-view-article');
+}
+
+// ============================================================
+// ARTICLES — RENDER
+// ============================================================
+function renderArticles() {
+  const articles = load(KEYS.articles);
+  const search = document.getElementById('searchArticles')?.value.toLowerCase() || '';
+  const region = document.getElementById('filterRegionArticles')?.value || '';
+  const filtered = articles.filter(a =>
+    (!search || a.title.toLowerCase().includes(search) || (a.body || '').toLowerCase().includes(search)) &&
+    (!region || a.region === region)
+  );
+  const grid = document.getElementById('articlesGrid');
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">✍️</div><div class="empty-state-title">Sin artículos</div><div class="empty-state-text">Use el editor para redactar su primer análisis.</div></div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(a => articleCard(a)).join('');
+}
+
+function articleCard(a) {
+  const preview = stripHtml(a.body || '').substring(0, 180);
+  const tags = a.tags?.length ? `<div class="card-tags">${a.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : '';
+  return `
+  <div class="card">
+    ${a.favorite ? '<div class="card-featured-badge">★ Destacado</div>' : ''}
+    <div class="card-image-placeholder" style="font-size:24px;height:80px">✍️</div>
+    <div class="card-body">
+      <div class="card-region">${a.region || ''} ${a.topic ? '· ' + a.topic : ''}</div>
+      <h3 class="card-title">${a.title}</h3>
+      <div class="card-meta">${a.date ? formatDate(a.date) : ''}${a.author ? ' · ' + a.author : ''}</div>
+      ${preview ? `<p class="card-summary">${preview}…</p>` : ''}
+      ${tags}
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-sm btn-primary" onclick="viewArticle(${a.id})">👁 Leer</button>
+      <button class="btn btn-sm" onclick="editArticle(${a.id})">✏️ Editar</button>
+      <button class="btn btn-sm btn-ghost" onclick="exportArticlePDF(${a.id})">📄 PDF</button>
+      <button class="btn btn-sm btn-ghost" onclick="toggleFavoriteArticle(${a.id})">★</button>
+      <button class="btn btn-sm btn-ghost" style="margin-left:auto;color:#b80000" onclick="deleteArticle(${a.id})">✕</button>
+    </div>
+  </div>`;
+}
+
+function toggleFavoriteArticle(id) {
+  const articles = load(KEYS.articles);
+  const i = articles.findIndex(a => a.id === id);
+  if (i > -1) { articles[i].favorite = !articles[i].favorite; save(KEYS.articles, articles); renderArticles(); renderFeatured(); toast(articles[i].favorite ? '★ Marcado como destacado.' : '☆ Quitado de destacados.'); }
+}
+function deleteArticle(id) {
+  if (!confirm('¿Eliminar este artículo?')) return;
+  save(KEYS.articles, load(KEYS.articles).filter(a => a.id !== id));
+  if (editingArticleId === id) newArticle();
+  renderArticles(); renderHome(); renderTimeline(); updateStats();
+  toast('🗑 Artículo eliminado.');
+}
+
+// ============================================================
+// HOME
+// ============================================================
+function renderHome() {
+  const news = load(KEYS.news);
+  const articles = load(KEYS.articles);
+  const all = [...news, ...articles].sort((a, b) => b.id - a.id).slice(0, 9);
+  const container = document.getElementById('homeColumns');
+  if (!all.length) {
+    container.innerHTML = `<div class="empty-state" style="break-inside:avoid"><div class="empty-state-icon">📰</div><div class="empty-state-title">La redacción está vacía</div><div class="empty-state-text">Agregue noticias o escriba su primer artículo para ver el periódico en acción.</div></div>`;
+    return;
+  }
+  container.innerHTML = all.map((item, i) => `
+    <div class="news-col-item">
+      ${i === 0 ? `<span class="featured-stripe">✦ ARTÍCULO PRINCIPAL ✦</span>` : ''}
+      <h3 class="news-col-headline">${item.url ? `<a href="${item.url}" target="_blank">${item.title}</a>` : (item.type === 'article' ? `<a href="#" onclick="viewArticle(${item.id});return false;">${item.title}</a>` : item.title)}</h3>
+      <div class="news-col-meta">${item.region || ''} ${item.topic ? '· ' + item.topic : ''} ${item.date ? '— ' + formatDate(item.date) : ''} ${item.source ? '— ' + item.source : (item.type === 'article' ? '— Redacción propia' : '')}</div>
+      <p class="news-col-body">${item.summary ? item.summary.substring(0, 220) : (item.body ? stripHtml(item.body).substring(0, 220) : '')}${(item.summary?.length > 220 || stripHtml(item.body || '').length > 220) ? '…' : ''}</p>
+    </div>
+    ${(i + 1) % 3 === 0 && i < all.length - 1 ? '<div class="ornamental-rule" style="break-inside:avoid">— ✦ —</div>' : ''}`
+  ).join('');
+}
+
+// ============================================================
+// TIMELINE
+// ============================================================
+function renderTimeline() {
+  const news = load(KEYS.news);
+  const articles = load(KEYS.articles);
+  const all = [...news, ...articles].sort((a, b) => {
+    const da = a.date || '0000', db = b.date || '0000';
+    return db.localeCompare(da);
+  });
+  const container = document.getElementById('timelineContainer');
+  if (!all.length) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🕰</div><div class="empty-state-title">El archivo cronológico está vacío</div></div>`;
+    return;
+  }
+  container.innerHTML = all.map(item => `
+    <div class="timeline-item">
+      <div class="timeline-date">📅 ${item.date ? formatDate(item.date) : 'Fecha desconocida'} · ${item.region || ''} ${item.topic ? '— ' + item.topic : ''}</div>
+      <div class="timeline-title">${item.type === 'article' ? `<a href="#" onclick="viewArticle(${item.id});return false;" style="color:var(--ink);text-decoration:none">${item.title}</a>` : (item.url ? `<a href="${item.url}" target="_blank" style="color:var(--ink);text-decoration:none">${item.title}</a>` : item.title)}</div>
+      <div style="font-size:12px;color:var(--sepia);font-style:italic">${item.source || (item.type === 'article' ? 'Artículo propio' : '')}${item.author ? ' · ' + item.author : ''}</div>
+    </div>`
+  ).join('');
+}
+
+// ============================================================
+// FEATURED & PENDING
+// ============================================================
+function renderFeatured() {
+  const news = load(KEYS.news).filter(n => n.favorite);
+  const arts = load(KEYS.articles).filter(a => a.favorite);
+  const all = [...news, ...arts];
+  const grid = document.getElementById('featuredGrid');
+  if (!all.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">⭐</div><div class="empty-state-title">Sin artículos destacados</div></div>`;
+    return;
+  }
+  grid.innerHTML = all.map(item => item.type === 'article' ? articleCard(item) : newsCard(item)).join('');
+}
+function renderPending() {
+  const news = load(KEYS.news).filter(n => n.pending);
+  const arts = load(KEYS.articles).filter(a => a.pending);
+  const all = [...news, ...arts];
+  const grid = document.getElementById('pendingGrid');
+  if (!all.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">📌</div><div class="empty-state-title">Sin lecturas pendientes</div></div>`;
+    return;
+  }
+  grid.innerHTML = all.map(item => item.type === 'article' ? articleCard(item) : newsCard(item)).join('');
+}
+
+// ============================================================
+// AGENDA
+// ============================================================
+function saveAgendaItem() {
+  const text = document.getElementById('ag-text').value.trim();
+  if (!text) { toast('⚠ La descripción es obligatoria.'); return; }
+  const items = load(KEYS.agenda);
+  items.push({
+    id: Date.now(),
+    text,
+    date: document.getElementById('ag-date').value || new Date().toISOString().split('T')[0],
+    time: document.getElementById('ag-time').value,
+    done: false
+  });
+  save(KEYS.agenda, items);
+  closeModal('modal-add-agenda');
+  document.getElementById('ag-text').value = '';
+  document.getElementById('ag-time').value = '';
+  renderAgenda();
+  toast('📅 Evento agendado.');
+}
+function renderAgenda() {
+  const items = load(KEYS.agenda);
+  const date = document.getElementById('agendaDateFilter')?.value || new Date().toISOString().split('T')[0];
+  const filtered = items.filter(i => i.date === date).sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+  const container = document.getElementById('agendaList');
+  if (!filtered.length) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📅</div><div class="empty-state-title">Sin eventos para este día</div><div class="empty-state-text">Agregue eventos y compromisos usando el botón superior.</div></div>`;
+    return;
+  }
+  container.innerHTML = filtered.map(item => `
+    <div class="agenda-item">
+      <div class="agenda-time">${item.time || '—'}</div>
+      <div class="agenda-text ${item.done ? 'agenda-done' : ''}">${item.text}</div>
+      <button class="btn btn-sm btn-ghost" onclick="toggleAgendaDone(${item.id})">${item.done ? '↩' : '✓'}</button>
+      <button class="btn btn-sm btn-ghost" style="color:#b80000" onclick="deleteAgendaItem(${item.id})">✕</button>
+    </div>`).join('');
+}
+function toggleAgendaDone(id) {
+  const items = load(KEYS.agenda);
+  const i = items.findIndex(x => x.id === id);
+  if (i > -1) { items[i].done = !items[i].done; save(KEYS.agenda, items); renderAgenda(); }
+}
+function deleteAgendaItem(id) {
+  save(KEYS.agenda, load(KEYS.agenda).filter(x => x.id !== id));
+  renderAgenda();
+}
+
+// ============================================================
+// RECOMENDADOS
+// ============================================================
+function saveRec() {
+  const name = document.getElementById('r-name').value.trim();
+  const url = document.getElementById('r-url').value.trim();
+  if (!name || !url) { toast('⚠ Nombre y URL son obligatorios.'); return; }
+  const recs = load(KEYS.recs);
+  recs.push({
+    id: Date.now(),
+    name,
+    url,
+    cat: document.getElementById('r-cat').value.trim(),
+    desc: document.getElementById('r-desc').value.trim()
+  });
+  save(KEYS.recs, recs);
+  closeModal('modal-add-rec');
+  ['r-name','r-url','r-cat','r-desc'].forEach(id => { document.getElementById(id).value = ''; });
+  renderRecs();
+  toast('🔗 Sitio agregado a Recomendados.');
+}
+function renderRecs() {
+  const recs = load(KEYS.recs);
+  const grid = document.getElementById('recGrid');
+  if (!recs.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">🔗</div><div class="empty-state-title">Sin sitios recomendados</div></div>`;
+    return;
+  }
+  grid.innerHTML = recs.map(r => `
+    <div class="rec-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div class="rec-card-title"><a href="${r.url}" target="_blank" style="color:var(--red-headline);text-decoration:none">🔗 ${r.name}</a></div>
+          ${r.cat ? `<span class="tag">${r.cat}</span>` : ''}
+        </div>
+        <button class="btn btn-sm btn-ghost" style="color:#b80000;min-width:24px" onclick="deleteRec(${r.id})">✕</button>
+      </div>
+      <div class="rec-card-url">${r.url}</div>
+      ${r.desc ? `<div class="rec-card-desc">${r.desc}</div>` : ''}
+    </div>`).join('');
+}
+function deleteRec(id) {
+  save(KEYS.recs, load(KEYS.recs).filter(r => r.id !== id));
+  renderRecs();
+  toast('🗑 Sitio eliminado.');
+}
+
+// ============================================================
+// PDF EXPORT
+// ============================================================
+function exportToPDF() {
+  const title = document.getElementById('edTitle').value.trim() || 'Artículo';
+  const author = document.getElementById('edAuthor').value.trim();
+  const date = document.getElementById('edDate').value;
+  const body = stripHtml(document.getElementById('edBody').innerHTML || '');
+  if (!body.trim()) { toast('⚠ El artículo está vacío.'); return; }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+
+  // Header
+  doc.setFont('times', 'bold');
+  doc.setFontSize(9);
+  doc.setTextColor(120, 60, 20);
+  doc.text('AGENDA GEOPOLÍTICA XXI — ARCHIVO PERSONAL', 105, 12, { align: 'center' });
+  doc.setDrawColor(120, 60, 20);
+  doc.line(15, 15, 195, 15);
+
+  // Title
+  doc.setFont('times', 'bold');
+  doc.setFontSize(22);
+  doc.setTextColor(160, 0, 0);
+  const titleLines = doc.splitTextToSize(title.toUpperCase(), 175);
+  doc.text(titleLines, 105, 28, { align: 'center' });
+  let y = 28 + titleLines.length * 9;
+
+  // Byline
+  doc.setFont('times', 'italic');
+  doc.setFontSize(9);
+  doc.setTextColor(100, 70, 30);
+  const byline = [author, date ? formatDate(date) : ''].filter(Boolean).join(' — ');
+  if (byline) { doc.text(byline, 105, y + 4, { align: 'center' }); y += 8; }
+  doc.line(15, y + 4, 195, y + 4);
+  y += 10;
+
+  // Body
+  doc.setFont('times', 'normal');
+  doc.setFontSize(11);
+  doc.setTextColor(20, 10, 5);
+  const lines = doc.splitTextToSize(body, 170);
+  const pageH = 270;
+  lines.forEach(line => {
+    if (y > pageH) { doc.addPage(); y = 20; }
+    doc.text(line, 20, y);
+    y += 6;
+  });
+
+  // Footer
+  doc.setFont('times', 'italic');
+  doc.setFontSize(8);
+  doc.setTextColor(150, 120, 60);
+  doc.text('Exportado desde Agenda Geopolítica XXI · Archivo personal de análisis internacional', 105, 290, { align: 'center' });
+
+  doc.save(`${title.substring(0, 40).replace(/\s+/g, '_')}.pdf`);
+  toast('📄 PDF exportado exitosamente.');
+}
+
+function exportArticlePDF(id) {
+  const articles = load(KEYS.articles);
+  const a = articles.find(x => x.id === id);
+  if (!a) return;
+  document.getElementById('edTitle').value = a.title;
+  document.getElementById('edAuthor').value = a.author || '';
+  document.getElementById('edDate').value = a.date || '';
+  document.getElementById('edBody').innerHTML = a.body || '';
+  exportToPDF();
+}
+
+function printArticle() {
+  window.print();
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function formatDate(d) {
+  if (!d) return '';
+  const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const parts = d.split('-');
+  if (parts.length < 3) return d;
+  return `${parseInt(parts[2])} de ${months[parseInt(parts[1]) - 1]} de ${parts[0]}`;
+}
+// Garantiza que todos los <a> en un fragmento HTML apunten a pestaña nueva
+function ensureExternalLinks(html) {
+  if (!html) return html;
+  const div = document.createElement('div');
+  div.innerHTML = html;
+  div.querySelectorAll('a').forEach(a => {
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener noreferrer');
+  });
+  return div.innerHTML;
+}
+
+function stripHtml(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+}
+function shareLink(url) {
+  if (navigator.share) {
+    navigator.share({ url }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(url).then(() => toast('🔗 Enlace copiado al portapapeles.'));
+  }
+}
+function toast(msg) {
+  const container = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  container.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+// ============================================================
+// EXPORTAR / IMPORTAR
+// ============================================================
+
+function buildExportPayload() {
+  return {
+    _meta: {
+      app: 'Agenda Geopolítica XXI',
+      version: '1.0',
+      exportedAt: new Date().toISOString(),
+      counts: {
+        news: load(KEYS.news).length,
+        articles: load(KEYS.articles).length,
+        recs: load(KEYS.recs).length,
+        agenda: load(KEYS.agenda).length
+      }
+    },
+    news: load(KEYS.news),
+    articles: load(KEYS.articles),
+    recs: load(KEYS.recs),
+    agenda: load(KEYS.agenda),
+    quickNote: localStorage.getItem(KEYS.quickNote) || '',
+    darkMode: localStorage.getItem('agxxi_darkmode') || '0'
+  };
+}
+
+function exportData() {
+  const payload = buildExportPayload();
+  const json = JSON.stringify(payload, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const ts = new Date().toISOString().split('T')[0];
+  a.href = url;
+  a.download = `agxxi_archivo_${ts}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showExportStats(payload);
+  toast('📥 Archivo JSON descargado exitosamente.');
+}
+
+function exportDataClipboard() {
+  const json = JSON.stringify(buildExportPayload(), null, 2);
+  navigator.clipboard.writeText(json).then(() => {
+    showExportStats(buildExportPayload());
+    toast('📋 JSON copiado al portapapeles.');
+  }).catch(() => toast('⚠ No se pudo copiar. Use la descarga directa.'));
+}
+
+function showExportStats(payload) {
+  const c = payload._meta.counts;
+  document.getElementById('exportStats').innerHTML =
+    `✓ Exportado: ${c.news} noticias · ${c.articles} artículos · ${c.recs} recomendados · ${c.agenda} eventos de agenda · 1 nota rápida`;
+}
+
+function parseImportJSON(raw) {
+  try {
+    const data = JSON.parse(raw);
+    if (!data || typeof data !== 'object') throw new Error('Formato inválido');
+    // Accept both formats: with _meta wrapper or raw arrays
+    return {
+      news: Array.isArray(data.news) ? data.news : [],
+      articles: Array.isArray(data.articles) ? data.articles : [],
+      recs: Array.isArray(data.recs) ? data.recs : [],
+      agenda: Array.isArray(data.agenda) ? data.agenda : [],
+      quickNote: typeof data.quickNote === 'string' ? data.quickNote : null,
+      darkMode: typeof data.darkMode === 'string' ? data.darkMode : null,
+      meta: data._meta || null
+    };
+  } catch (e) {
+    return null;
+  }
+}
+
+function buildPreviewText(parsed) {
+  if (!parsed) return null;
+  const m = parsed.meta;
+  let txt = '';
+  if (m) txt += `Exportado el ${new Date(m.exportedAt).toLocaleString('es-AR')} — versión ${m.version || '?'}\n`;
+  txt += `📰 Noticias: ${parsed.news.length}  ·  ✍️ Artículos: ${parsed.articles.length}  ·  🔗 Recomendados: ${parsed.recs.length}  ·  📅 Agenda: ${parsed.agenda.length}`;
+  return txt;
+}
+
+function applyImport(parsed, mode) {
+  if (!parsed) { toast('⚠ JSON inválido o no reconocido.'); return false; }
+  if (mode === 'replace') {
+    if (!confirm(`⚠ MODO REEMPLAZO: Se borrarán TODOS los datos actuales y se cargarán los del archivo.\n\nNoticias actuales: ${load(KEYS.news).length} → ${parsed.news.length}\nArtículos actuales: ${load(KEYS.articles).length} → ${parsed.articles.length}\n\n¿Confirma?`)) return false;
+    save(KEYS.news, parsed.news);
+    save(KEYS.articles, parsed.articles);
+    save(KEYS.recs, parsed.recs);
+    save(KEYS.agenda, parsed.agenda);
+  } else {
+    // Merge: add only items whose id doesn't already exist
+    const mergeArr = (existing, incoming) => {
+      const ids = new Set(existing.map(x => x.id));
+      const merged = [...existing];
+      incoming.forEach(item => { if (!ids.has(item.id)) merged.push(item); });
+      return merged;
+    };
+    save(KEYS.news, mergeArr(load(KEYS.news), parsed.news));
+    save(KEYS.articles, mergeArr(load(KEYS.articles), parsed.articles));
+    save(KEYS.recs, mergeArr(load(KEYS.recs), parsed.recs));
+    save(KEYS.agenda, mergeArr(load(KEYS.agenda), parsed.agenda));
+  }
+  if (parsed.quickNote !== null) {
+    localStorage.setItem(KEYS.quickNote, parsed.quickNote);
+    document.getElementById('quickNote').value = parsed.quickNote;
+  }
+  if (parsed.darkMode !== null) {
+    localStorage.setItem('agxxi_darkmode', parsed.darkMode);
+    if (parsed.darkMode === '1') document.body.classList.add('dark-mode');
+    else document.body.classList.remove('dark-mode');
+  }
+  return true;
+}
+
+function previewImport() {
+  const file = document.getElementById('importFile').files[0];
+  if (!file) { toast('⚠ Seleccione un archivo primero.'); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    const parsed = parseImportJSON(e.target.result);
+    const preview = document.getElementById('importPreview');
+    if (!parsed) {
+      preview.style.display = 'block';
+      preview.innerHTML = '❌ Archivo no válido. Asegúrese de usar un JSON exportado desde este dashboard.';
+    } else {
+      preview.style.display = 'block';
+      preview.innerHTML = '✅ Archivo válido.<br>' + buildPreviewText(parsed).replace(/\n/g, '<br>');
+    }
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+function importData() {
+  const file = document.getElementById('importFile').files[0];
+  if (!file) { toast('⚠ Seleccione un archivo primero.'); return; }
+  const mode = document.getElementById('importMode').value;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const parsed = parseImportJSON(e.target.result);
+    if (applyImport(parsed, mode)) {
+      closeModal('modal-export-import');
+      updateStats();
+      renderHome();
+      renderNews();
+      renderArticles();
+      renderTimeline();
+      renderRecs();
+      renderFeatured();
+      renderPending();
+      renderAgenda();
+      toast(`✅ Importación completada (modo: ${mode === 'replace' ? 'reemplazo' : 'fusión'}).`);
+    }
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+function previewPastedImport() {
+  const raw = document.getElementById('importPaste').value.trim();
+  if (!raw) { toast('⚠ Pegue el contenido JSON primero.'); return; }
+  const parsed = parseImportJSON(raw);
+  const preview = document.getElementById('importPreview');
+  preview.style.display = 'block';
+  if (!parsed) {
+    preview.innerHTML = '❌ JSON inválido. Verifique el contenido pegado.';
+  } else {
+    preview.innerHTML = '✅ JSON válido.<br>' + buildPreviewText(parsed).replace(/\n/g, '<br>');
+  }
+}
+
+function importPastedData() {
+  const raw = document.getElementById('importPaste').value.trim();
+  if (!raw) { toast('⚠ Pegue el contenido JSON primero.'); return; }
+  const mode = document.getElementById('importMode').value;
+  const parsed = parseImportJSON(raw);
+  if (applyImport(parsed, mode)) {
+    closeModal('modal-export-import');
+    updateStats();
+    renderHome(); renderNews(); renderArticles(); renderTimeline();
+    renderRecs(); renderFeatured(); renderPending(); renderAgenda();
+    toast(`✅ Importación desde portapapeles completada (modo: ${mode === 'replace' ? 'reemplazo' : 'fusión'}).`);
+  }
+}
+
+// Show export stats when modal opens
+const _origOpenModal = openModal;
+// Patch openModal to refresh export stats
+const _patchedOpen = function(id) {
+  _origOpenModal(id);
+  if (id === 'modal-export-import') showExportStats(buildExportPayload());
+};
+// Override
+window.openModal = _patchedOpen;
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  updateStats();
+  renderHome();
+  // Load quick note
+  document.getElementById('quickNote').value = localStorage.getItem(KEYS.quickNote) || '';
+  // Default date
+  document.getElementById('edDate').value = new Date().toISOString().split('T')[0];
+  // Agenda date
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('agendaDateFilter').value = today;
+}
+init();
+</script>
+</body>
+</html>
